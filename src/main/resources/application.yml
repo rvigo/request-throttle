@@ -1,0 +1,8 @@
+
+spring.data.mongodb:
+    database: 'ThrottleClients'
+    port: 27017
+    host: 'localhost'
+
+throttle:
+    period: 60000
