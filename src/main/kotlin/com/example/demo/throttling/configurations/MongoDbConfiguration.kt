@@ -27,12 +27,12 @@ class MongoDbConfiguration : AbstractMongoClientConfiguration() {
     }
 
     override fun mongoClient(): MongoClient {
-        val connectionString = ConnectionString(String.format("mongodb://%s:%s/%s", host, port, database))
+        val connectionString = ConnectionString("mongodb://$host:$port/$database")
         val mongoClientSettings = MongoClientSettings.builder()
             .applyConnectionString(connectionString)
             .build()
         return MongoClients.create(mongoClientSettings).also {
-            log.info { "connected to mongodb host" }
+            log.info { "connected to mongodb: $host:$port/$database" }
         }
     }
 }

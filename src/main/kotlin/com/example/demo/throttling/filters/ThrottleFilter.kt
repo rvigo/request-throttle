@@ -23,7 +23,6 @@ class ThrottleFilter(
         response: HttpServletResponse,
         filterChain: FilterChain
     ) {
-
         try {
             val clientId = request.getHeader("x-client-id")
             callsHandler.addClientIdentifier(clientId)
@@ -37,8 +36,10 @@ class ThrottleFilter(
 
     private fun prepareErrorResponse(ex: TooManyRequestsException, response: HttpServletResponse) {
         val json = FilterErrorHandler.handle(ex)
-        response.writer.write(json)
-        response.contentType = MediaType.APPLICATION_JSON_VALUE
-        response.status = ex.httpStatus.value()
+        response.run {
+            writer.write(json)
+            contentType = MediaType.APPLICATION_JSON_VALUE
+            status = ex.httpStatus.value()
+        }
     }
 }

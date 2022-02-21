@@ -10,19 +10,18 @@ class Orchestrator(
     private val callsHandler: ClientCallsHandler,
     private val clientService: ClientService,
 ) {
-
-
     private val log = KotlinLogging.logger {}
 
     fun callService(clientId: String) {
         val count = callsHandler.getCallsCount(clientId)
-        if (count!! >= clientService.getClientRateLimit(clientId)) {
-            log.error("too many requests for {}", clientId)
-            throw TooManyRequestsException("too many requests for $clientId", TOO_MANY_REQUESTS)
+        when (count!! >= clientService.getClientRateLimit(clientId)) {
+            true -> throw TooManyRequestsException(
+                "too many requests for $clientId",
+                TOO_MANY_REQUESTS
+            ).also { log.error("too many requests for $clientId") }
+
+            false -> callsHandler.incrementCount(clientId)
+                .also { log.info { "request for $clientId can be completed ${count.inc()}" } }
         }
-
-        callsHandler.incrementCount(clientId)
-            .also { log.info("request for {} can be completed {}", clientId, count + 1) }
-
     }
 }

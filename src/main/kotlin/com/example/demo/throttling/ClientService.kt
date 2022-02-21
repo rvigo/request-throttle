@@ -12,14 +12,14 @@ class ClientService(private val clientRepository: ClientRepository) {
 
     fun getClientRateLimit(clientId: String): Int {
         val client = clientRepository.findById(clientId)
-        if (client.isPresent) {
-            client.get().also {
-                log.info("client found! {}", it)
-                return it.rate
+        return when (client.isPresent) {
+            true -> client.get().rate
+            false -> createNonMappedClient(clientId).also {
+                log.info {
+                    "client not found, setting default rate to $DEFAULT_RATE_VALUE"
+                }
             }
         }
-        log.info("client not found, setting default rate to {}", DEFAULT_RATE_VALUE)
-        return createNonMappedClient(clientId)
     }
 
     private fun createNonMappedClient(clientId: String): Int {

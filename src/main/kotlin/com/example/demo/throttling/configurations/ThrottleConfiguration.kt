@@ -14,10 +14,7 @@ class ThrottleConfiguration(@Value("\${throttle.period}") val period: Long) {
     @Bean
     fun getThrottle(clientCallsHandler: ClientCallsHandler): Throttle {
         val throttle = Throttle(clientCallsHandler, period)
-        return throttle
-            .also {
-                it.start()
-                log.info("the throttle has started - {}", it)
-            }
+        throttle.start()
+        return throttle.also { log.info("the throttle has started - $it") }
     }
 }
