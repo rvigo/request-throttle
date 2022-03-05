@@ -1,8 +1,8 @@
 package com.example.demo.throttling.repositories
 
-import com.example.demo.throttling.entity.Client
-import org.springframework.data.mongodb.repository.MongoRepository
+import com.example.demo.throttling.entities.Client
+import org.springframework.data.repository.CrudRepository
 import org.springframework.stereotype.Repository
 
 @Repository
-interface ClientRepository : MongoRepository<Client, String>
+interface ClientRepository : CrudRepository<Client, String>
