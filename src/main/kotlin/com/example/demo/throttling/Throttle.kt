@@ -4,14 +4,14 @@ import java.util.*
 import kotlin.concurrent.timerTask
 
 class Throttle(
-    private val callsHandler: ClientCallsHandler,
-    private val period: Long
+	private val callsHandler: ClientCallsHandler,
+	private val period: Long
 ) {
-    fun start() {
-        Timer(true).schedule(timerTask {
-            callsHandler.resetCount()
-        }, 0, period)
-    }
+	fun start() {
+		Timer(true).schedule(timerTask {
+			callsHandler.resetCount()
+		}, 0, period)
+	}
 
-    override fun toString(): String = "Throttle(period=$period)"
+	override fun toString(): String = "Throttle(period=$period)"
 }

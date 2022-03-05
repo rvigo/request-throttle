@@ -5,10 +5,10 @@ import com.example.demo.throttling.exceptions.TooManyRequestsException
 import com.fasterxml.jackson.databind.ObjectMapper
 
 class FilterErrorHandler {
-    companion object {
-        private val objectMapper = ObjectMapper()
+	companion object {
+		private val objectMapper = ObjectMapper()
 
-        fun handle(ex: TooManyRequestsException): String =
-            objectMapper.writeValueAsString(DataWrapper(ex.message))
-    }
+		fun handle(ex: TooManyRequestsException): String =
+			objectMapper.writeValueAsString(DataWrapper(ex.message))
+	}
 }
