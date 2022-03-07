@@ -2,5 +2,5 @@ spring.redis:
     host: localhost
     port: 6379
 throttle:
-    period: 60000 # in ms
+    period: 1000 # in ms
     default_rate_value: 5 # n of calls
