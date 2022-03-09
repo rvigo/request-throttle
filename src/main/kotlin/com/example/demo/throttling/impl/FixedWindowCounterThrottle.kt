@@ -14,7 +14,7 @@ import java.util.*
 import java.util.concurrent.ConcurrentHashMap
 import kotlin.concurrent.timerTask
 
-class FixedWindowThrottling(
+class FixedWindowCounterThrottle(
 	private val clientRepository: ClientRepository,
 	private val redisAtomicLongFactory: RedisAtomicLongFactory,
 	period: Long,

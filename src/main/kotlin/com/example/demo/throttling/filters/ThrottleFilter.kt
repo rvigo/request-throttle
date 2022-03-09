@@ -1,7 +1,6 @@
 package com.example.demo.throttling.filters
 
 import com.example.demo.throttling.ThrottlingType
-import com.example.demo.throttling.impl.LeakingBucketThrottling
 import com.example.demo.throttling.exceptions.TooManyRequestsException
 import org.springframework.http.MediaType
 import org.springframework.stereotype.Component

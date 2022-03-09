@@ -17,7 +17,7 @@ import java.util.concurrent.atomic.AtomicLong
 import kotlin.concurrent.timerTask
 
 
-class LeakingBucketThrottling(
+class SlidingWindowCounterThrottle(
 	private val clientRepository: ClientRepository,
 	private val redisAtomicLongFactory: RedisAtomicLongFactory,
 	private val bucketRenovationPeriod: Long,

@@ -2,7 +2,7 @@ package com.example.demo.configurations
 
 import com.example.demo.throttling.configurations.RedisAtomicLongFactory
 import com.example.demo.throttling.entities.Client
-import com.example.demo.throttling.impl.FixedWindowThrottling
+import com.example.demo.throttling.impl.FixedWindowCounterThrottle
 import com.example.demo.throttling.repositories.ClientRepository
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
@@ -42,12 +42,12 @@ class ThrottleConfiguration {
 		@Value("\${throttle.period}") period: Long,
 		@Value("\${throttle.default_rate_value}") defaultRateValue: Int,
 		redisAtomicLongFactory: RedisAtomicLongFactory
-	): FixedWindowThrottling {
+	): FixedWindowCounterThrottle {
 		val client1 = Client(name = "test", rate = 7)
 		val client2 = Client(name = "test-2", rate = 2)
 
 		log.info("creating LeakingBucket object")
-		return FixedWindowThrottling(
+		return FixedWindowCounterThrottle(
 			clientRepository = clientRepository,
 			period = period,
 			defaultRateValue = defaultRateValue,
