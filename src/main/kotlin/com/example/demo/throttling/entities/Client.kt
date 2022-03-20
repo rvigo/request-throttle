@@ -2,16 +2,19 @@ package com.example.demo.throttling.entities
 
 import org.springframework.data.annotation.Id
 import org.springframework.data.redis.core.RedisHash
+import org.springframework.data.redis.core.index.Indexed
 import java.io.Serializable
-import java.time.*
-import java.util.concurrent.atomic.AtomicLong
+import java.time.LocalDateTime
+import java.time.ZoneOffset
 
 @RedisHash("client")
 open class Client(
 	@Id
 	var name: String,
-	var rate: Int,
-	var lastCallTimestamp: Long = System.currentTimeMillis()
+	var rate: Long,
+	var lastCallTimestamp: Long = System.currentTimeMillis(),
+	@Indexed
+	var isMapped: Boolean = false
 
 ) : Serializable {
 	override fun toString(): String =

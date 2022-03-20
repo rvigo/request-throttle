@@ -1,6 +1,6 @@
 package com.example.demo.throttling.filters
 
-import com.example.demo.throttling.ThrottlingType
+import com.example.demo.throttling.services.Throttling
 import com.example.demo.throttling.exceptions.TooManyRequestsException
 import org.springframework.http.MediaType
 import org.springframework.stereotype.Component
@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletResponse
 
 
 @Component
-class ThrottleFilter(private val throttleService: ThrottlingType) :
+class ThrottleFilter(private val throttleService: Throttling) :
 	OncePerRequestFilter() {
 
 	override fun doFilterInternal(

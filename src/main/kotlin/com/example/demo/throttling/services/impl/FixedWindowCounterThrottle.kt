@@ -1,11 +1,10 @@
-package com.example.demo.throttling.impl
+package com.example.demo.throttling.services.impl
 
-import com.example.demo.throttling.ThrottlingType
+import com.example.demo.throttling.services.Throttling
 import com.example.demo.throttling.configurations.RedisAtomicLongFactory
 import com.example.demo.throttling.entities.Client
 import com.example.demo.throttling.exceptions.TooManyRequestsException
 import com.example.demo.throttling.repositories.ClientRepository
-import com.example.demo.throttling.utils.TimeConversionUtil.Companion.getTimeInMillis
 import org.slf4j.LoggerFactory
 import org.springframework.data.redis.support.atomic.RedisAtomicLong
 import org.springframework.data.repository.findByIdOrNull
@@ -18,8 +17,8 @@ class FixedWindowCounterThrottle(
 	private val clientRepository: ClientRepository,
 	private val redisAtomicLongFactory: RedisAtomicLongFactory,
 	period: Long,
-	private val defaultRateValue: Int
-) : ThrottlingType {
+	private val defaultRateValue: Long
+) : Throttling {
 	private val log = LoggerFactory.getLogger(this::class.java)
 
 	private val clientCallsCountMap = ConcurrentHashMap<String, RedisAtomicLong>()
@@ -32,7 +31,7 @@ class FixedWindowCounterThrottle(
 
 	//TODO remover
 	fun addClient(client: Client) {
-		clientCallsCountMap.putIfAbsent(client.name, redisAtomicLongFactory.of(client))
+		clientCallsCountMap.putIfAbsent(client.name, redisAtomicLongFactory.of(client.name))
 		clientRepository.save(client)
 	}
 
