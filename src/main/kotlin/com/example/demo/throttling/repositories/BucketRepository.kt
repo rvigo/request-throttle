@@ -1,10 +1,8 @@
 package com.example.demo.throttling.repositories
 
-import com.example.demo.throttling.entities.Client
+import com.example.demo.throttling.entities.Bucket
 import org.springframework.data.repository.CrudRepository
 import org.springframework.stereotype.Repository
 
 @Repository
-interface ClientRepository : CrudRepository<Client, String> {
-	fun findAllClientsByIsMappedTrue(): List<Client>
-}
+interface BucketRepository : CrudRepository<Bucket, String>

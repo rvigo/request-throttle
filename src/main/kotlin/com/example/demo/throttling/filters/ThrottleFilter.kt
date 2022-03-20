@@ -1,7 +1,6 @@
 package com.example.demo.throttling.filters
 
-import com.example.demo.throttling.ClientCallsHandler
-import com.example.demo.throttling.Orchestrator
+import com.example.demo.throttling.services.Throttling
 import com.example.demo.throttling.exceptions.TooManyRequestsException
 import org.springframework.http.MediaType
 import org.springframework.stereotype.Component
@@ -12,10 +11,7 @@ import javax.servlet.http.HttpServletResponse
 
 
 @Component
-class ThrottleFilter(
-	private val callsHandler: ClientCallsHandler,
-	private val orchestrator: Orchestrator,
-) :
+class ThrottleFilter(private val throttleService: Throttling) :
 	OncePerRequestFilter() {
 
 	override fun doFilterInternal(
@@ -25,8 +21,7 @@ class ThrottleFilter(
 	) {
 		try {
 			val clientId = request.getHeader("x-client-id")
-			callsHandler.addClientIdentifier(clientId)
-			orchestrator.callService(clientId)
+			throttleService.throttle(clientId)
 
 			filterChain.doFilter(request, response)
 		} catch (ex: TooManyRequestsException) {
@@ -36,7 +31,7 @@ class ThrottleFilter(
 
 	private fun prepareErrorResponse(ex: TooManyRequestsException, response: HttpServletResponse) {
 		val json = FilterErrorHandler.handle(ex)
-		response.run {
+		response.apply {
 			writer.write(json)
 			contentType = MediaType.APPLICATION_JSON_VALUE
 			status = ex.httpStatus.value()
