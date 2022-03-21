@@ -33,7 +33,7 @@ class BucketService(
 
 	fun clearBucket(bucket: Bucket) {
 		synchronized(this) {
-			setLastBucketRenovation().also { bucketRepository.save(bucket) }
+			setLastBucketRenovation()
 		}
 	}
 
@@ -47,7 +47,4 @@ class BucketService(
 
 	fun getLastBucketRenovation(): Long =
 		synchronized(this) { lastBucketRenovation.get() }
-
-	override fun toString(): String =
-		"Bucket(bucketId=$bucketId, bucketRenovationPeriod=$bucketRenovationPeriod)"
 }

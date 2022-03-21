@@ -116,9 +116,4 @@ class SlidingWindowCounterThrottle(
 			)
 		}).also { log.debug("loaded mapped clients: $clientCallsCountMap") }
 	}
-
-	override fun toString(): String =
-		"LeakingBucketThrottling(lastUpdate=${
-			getLocalDateTimeFromLong(bucketService.getLastBucketRenovation())
-		}, renovationTime=${bucket.renovationPeriod}, defaultRateValue=$defaultRateValue)"
 }

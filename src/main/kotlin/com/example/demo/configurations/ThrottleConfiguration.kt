@@ -31,9 +31,7 @@ class ThrottleConfiguration {
 			redisAtomicLongFactory = redisAtomicLongFactory,
 			defaultRateValue = defaultRateValue,
 			bucketService = bucketService
-		).also {
-			log.info(it.toString())
-		}
+		)
 	}
 
 	fun populateDatabase(clientRepository: ClientRepository) {
