@@ -43,7 +43,7 @@ class FixedWindowCounterThrottle(
 					rate = defaultRateValue,
 				).also { addClient(it) }
 
-			when (isThrottled(client)) {
+			when (client.isThrottled()) {
 				true -> throw TooManyRequestsException(
 					"too many requests for $clientIdentifier",
 					HttpStatus.TOO_MANY_REQUESTS
@@ -58,5 +58,5 @@ class FixedWindowCounterThrottle(
 		}
 	}
 
-	override fun isThrottled(client: Client) = clientCallsCountMap[client.name]!!.get() >= client.rate
+	override fun Client.isThrottled() = clientCallsCountMap[this.name]!!.get() >= this.rate
 }

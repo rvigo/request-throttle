@@ -12,7 +12,7 @@ open class Client(
 	@Id
 	var name: String,
 	var rate: Long,
-	var lastCallTimestamp: Long = System.currentTimeMillis(),
+	var lastCallTime: Long = System.currentTimeMillis(),
 	@Indexed
 	var isMapped: Boolean = false
 
@@ -20,8 +20,8 @@ open class Client(
 	override fun toString(): String =
 		"Client(name=$name, rate=$rate), lastCallTimestamp=${
 			LocalDateTime.ofEpochSecond(
-				lastCallTimestamp / 1000,
-				((lastCallTimestamp % 1000 * 1000000).toInt()), ZoneOffset.UTC
+				lastCallTime / 1000,
+				((lastCallTime % 1000 * 1000000).toInt()), ZoneOffset.UTC
 			)
 		}"
 }

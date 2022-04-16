@@ -6,8 +6,6 @@ import com.example.demo.throttling.repositories.BucketRepository
 import com.example.demo.throttling.services.impl.BucketService
 import io.mockk.*
 import io.mockk.impl.annotations.MockK
-import org.assertj.core.api.Assertions.assertThat
-import org.hamcrest.CoreMatchers.instanceOf
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -69,8 +67,10 @@ class BucketServiceTest {
 	fun `should clears the current bucket`() {
 		every { lastBucketRenovation.set(any()) } just Runs
 		every { lastBucketRenovation.get() } returns (System.currentTimeMillis() - bucketRenovationPeriod * 100)
+		every { bucketRepository.findByIdOrNull(any()) } returns bucket
+		bucketService.getBucket()
 
-		bucketService.clearBucket(bucket)
+		bucketService.clearBucket()
 
 		verify(exactly = 1) { lastBucketRenovation.set(any()) }
 	}
@@ -79,7 +79,7 @@ class BucketServiceTest {
 	fun `should get the last bucket renovation timestamp`() {
 		every { lastBucketRenovation.get() } returns System.currentTimeMillis()
 
-		val result = bucketService.getLastBucketRenovation()
+		val result = bucketService.getLastBucketRenovationTime()
 
 		assertNotNull(result)
 	}

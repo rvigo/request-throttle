@@ -19,19 +19,22 @@ class BucketService(
 	redisAtomicLongFactory: RedisAtomicLongFactory,
 ) {
 	private val log = LoggerFactory.getLogger(this::class.java)
-
 	private var lastBucketRenovation: RedisAtomicLong = redisAtomicLongFactory.of(bucketId)
+	private lateinit var bucket: Bucket
 
-	fun getBucket(): Bucket = synchronized(this) {
-		bucketRepository.findByIdOrNull(bucketId)
-			?: Bucket().apply {
-				id = bucketId
-				renovationPeriod = bucketRenovationPeriod
-			}
-				.also { bucketRepository.save(it) }
+	fun getBucket(): Bucket {
+		synchronized(this) {
+			bucket = bucketRepository.findByIdOrNull(bucketId)
+				?: Bucket().apply {
+					id = bucketId
+					renovationPeriod = bucketRenovationPeriod
+
+				}.also { bucketRepository.save(it) }
+			return bucket
+		}
 	}
 
-	fun clearBucket(bucket: Bucket) {
+	fun clearBucket() {
 		synchronized(this) {
 			setLastBucketRenovation()
 		}
@@ -40,11 +43,12 @@ class BucketService(
 	private fun setLastBucketRenovation() {
 		synchronized(this) {
 			val currentTimestamp = System.currentTimeMillis()
-			if (currentTimestamp > lastBucketRenovation.get() + bucketRenovationPeriod)
-				lastBucketRenovation.set(currentTimestamp).also { log.debug("updating lastBucketRenovation timestamp") }
+			if (currentTimestamp > lastBucketRenovation.get() + bucket.renovationPeriod)
+				lastBucketRenovation.set(currentTimestamp)
+					.also { log.debug("updating lastBucketRenovation timestamp") }
 		}
 	}
 
-	fun getLastBucketRenovation(): Long =
+	fun getLastBucketRenovationTime(): Long =
 		synchronized(this) { lastBucketRenovation.get() }
 }
